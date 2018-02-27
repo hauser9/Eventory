@@ -1,14 +1,20 @@
 package com.eventory.andriod.eventory;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Michael on 2/19/2018.
@@ -17,6 +23,12 @@ import java.util.List;
 public class ItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanecState){
@@ -33,14 +45,69 @@ public class ItemListFragment extends Fragment {
         Inventory inventory = Inventory.get(getActivity());
         List<Item> items = inventory.getItems();
 
-        mAdapter = new ItemAdapter(items);
-        mItemRecyclerView.setAdapter(mAdapter);
+        if(mAdapter == null) {
+            mAdapter = new ItemAdapter(items);
+            mItemRecyclerView.setAdapter(mAdapter);
+        }
+        else
+        {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
-    public class ItemHolder extends RecyclerView.ViewHolder{
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_item_list,menu);
+    }
+
+    //TODO: menu new item data will be lost when rotated need to fix this once database is added
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        switch(menuItem.getItemId()){
+            case R.id.new_item:
+                Item item = new Item();
+                Inventory.get(getActivity()).addItem(item);
+                Intent intent = ItemActivity.newIntent(getActivity(),item.getId());
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+    public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private TextView mNameTextView;
+        private TextView mQuantityTextView;
+        private Item mItem;
 
         public ItemHolder(LayoutInflater inflater, ViewGroup parent){
             super(inflater.inflate(R.layout.list_item,parent,false));
+            itemView.setOnClickListener(this);
+
+            mNameTextView = (TextView) itemView.findViewById(R.id.item_name);
+            mQuantityTextView = (TextView) itemView.findViewById(R.id.item_quantity);
+        }
+
+        public void bind(Item item){
+            mItem = item;
+            mNameTextView.setText(mItem.getName());
+            mQuantityTextView.setText("" + mItem.getQuantity());
+        }
+
+        @Override
+        public void onClick(View view){
+            UUID id = mItem.getId();
+            Item item = Inventory.get(getActivity()).getItem(id);
+            Intent intent = ItemActivity.newIntent(getActivity(),mItem.getId());
+            startActivity(intent);
         }
     }
 
@@ -61,7 +128,8 @@ public class ItemListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ItemHolder holder, int position){
-
+            Item item = mItems.get(position);
+            holder.bind(item);
         }
 
         @Override

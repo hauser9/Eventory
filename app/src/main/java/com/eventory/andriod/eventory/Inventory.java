@@ -24,14 +24,7 @@ public class Inventory {
     }
 
     private Inventory(Context context){
-        mItems = new ArrayList<>();
-        for(int i = 0; i< 20; i++)
-        {
-            Item item = new Item();
-            item.setName("Item #" + 1);
-            item.setQuantity(i*3+4-2);
-            mItems.add(item);
-        }
+        mItems = new ArrayList<Item>();
     }
 
     public List<Item> getItems(){
@@ -45,5 +38,9 @@ public class Inventory {
             }
         }
         return null;
+    }
+
+    public void addItem(Item item){
+        mItems.add(item);
     }
 }

@@ -9,19 +9,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by Michael on 2/26/2018.
  */
 
 public class ItemFragment extends Fragment {
+
+    private static final String ARG_ITEM_ID = "item_id";
+
     private Item mItem;
     private EditText mNameField;
     private EditText mQuantityField;
 
+    public static ItemFragment newInstance(UUID itemId){
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ITEM_ID,itemId);
+
+        ItemFragment fragment = new ItemFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItem = new Item();
+        UUID itemId = (UUID) getArguments().getSerializable(ARG_ITEM_ID);
+        mItem = Inventory.get(getActivity()).getItem(itemId);
     }
 
     @Override
@@ -29,7 +44,9 @@ public class ItemFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_item, container, false);
 
         mNameField = (EditText) v.findViewById(R.id.item_name);
+        mNameField.setText(mItem.getName());
         mQuantityField = (EditText) v.findViewById(R.id.item_quantity);
+        mQuantityField.setText("" + mItem.getQuantity());
 
         mNameField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -57,6 +74,10 @@ public class ItemFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String quantity = s.toString();
+                if(quantity.equals(""))
+                {
+                    quantity = "0";
+                }
                 int number = Integer.parseInt(quantity);
                 mItem.setQuantity(number);
             }
@@ -68,4 +89,5 @@ public class ItemFragment extends Fragment {
         });
         return v;
     }
+
 }

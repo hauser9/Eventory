@@ -3,4 +3,5 @@
     <string name="item_name_hint">Enter the item\'s name</string>
     <string name="item_name_label">Name</string>
     <string name="item_quantity">Quantity</string>
+    <string name="new_item">New Item</string>
 </resources>
