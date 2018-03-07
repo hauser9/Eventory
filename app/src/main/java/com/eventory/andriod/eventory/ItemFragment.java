@@ -1,14 +1,28 @@
 package com.eventory.andriod.eventory;
 
+import android.content.Intent;
+import android.os.Build;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
 import java.util.UUID;
 
 /**
@@ -17,11 +31,13 @@ import java.util.UUID;
 
 public class ItemFragment extends Fragment {
 
+
+    private static final String URL_HEADER = "https://api.upcitemdb.com/prod/trial/lookup?upc=";
     private static final String ARG_ITEM_ID = "item_id";
 
     private Item mItem;
-    private EditText mNameField;
-    private EditText mQuantityField;
+    public static EditText mNameField;
+    public static EditText mQuantityField;
 
     public static ItemFragment newInstance(UUID itemId){
         Bundle args = new Bundle();
@@ -35,6 +51,7 @@ public class ItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         UUID itemId = (UUID) getArguments().getSerializable(ARG_ITEM_ID);
         mItem = Inventory.get(getActivity()).getItem(itemId);
     }
@@ -88,6 +105,51 @@ public class ItemFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
+        if(scanningResult != null)
+        {
+            String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            String upcHttp = URL_HEADER + scanContent;
+            FetchData process = new FetchData(upcHttp);
+            process.execute();
+
+
+        }
+        else{
+                Toast.makeText(getActivity(),R.string.no_scan_data,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu,inflater);
+        inflater.inflate(R.menu.fragment_item,menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.delete_item:
+                Inventory.get(getActivity()).deleteItem(mItem);
+                getActivity().finish();
+                return true;
+            case R.id.scan_barcode:
+                IntentIntegrator.forSupportFragment(this).initiateScan();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        Inventory.get(getActivity()).updateItem(mItem);
     }
 
 }

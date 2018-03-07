@@ -4,4 +4,6 @@
     <string name="item_name_label">Name</string>
     <string name="item_quantity">Quantity</string>
     <string name="new_item">New Item</string>
+    <string name="scan_barcode">Scan Barcode</string>
+    <string name="no_scan_data">No scan data recieved!</string>
 </resources>

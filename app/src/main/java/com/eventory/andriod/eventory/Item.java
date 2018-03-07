@@ -12,7 +12,11 @@ public class Item {
     private int mQuantity;
 
     public Item(){
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Item(UUID id){
+        mId = id;
     }
 
     public UUID getId()

@@ -25,4 +25,9 @@ public class ItemActivity extends SingleFragmentActivity {
         UUID itemId = (UUID) getIntent().getSerializableExtra(EXTRA_ITEM_ID);
         return ItemFragment.newInstance(itemId);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+        super.onActivityResult(requestCode,resultCode,intent);
+    }
 }
