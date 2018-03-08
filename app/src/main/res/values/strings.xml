@@ -6,4 +6,5 @@
     <string name="new_item">New Item</string>
     <string name="scan_barcode">Scan Barcode</string>
     <string name="no_scan_data">No scan data recieved!</string>
+    <string name="date_picker_title">Date item is recieved</string>
 </resources>

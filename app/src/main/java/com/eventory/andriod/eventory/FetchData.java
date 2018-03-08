@@ -1,6 +1,8 @@
 package com.eventory.andriod.eventory;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,11 +24,13 @@ public class FetchData extends AsyncTask<Void,Void,Void> {
 
     String data = "";
     static String name = "";
+    private static Context mContext;
 
     static public String mUrl;
 
-    public FetchData(String url){
+    public FetchData(String url, Context context){
         mUrl = url;
+        mContext = context;
     }
 
 
@@ -44,24 +48,10 @@ public class FetchData extends AsyncTask<Void,Void,Void> {
                 line = bufferedReader.readLine();
                 data = data + line;
             }
-
-            JSONObject jsonObject = new JSONObject(data);
-            JSONArray jsonArray = jsonObject.getJSONArray("items");
-            jsonObject = jsonArray.getJSONObject(0);
-            if(jsonObject.has("title"))
-            {
-                name = jsonObject.getString("title");
-            }
-            else{
-
-            }
-
-
+            //TODO this only works if it can find a item with that barcode does not handle error
         }catch(MalformedURLException e){
             e.printStackTrace();
         }catch (IOException e){
-            e.printStackTrace();
-        }catch (JSONException e){
             e.printStackTrace();
         }
 
@@ -71,7 +61,28 @@ public class FetchData extends AsyncTask<Void,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        ItemFragment.mNameField.setText(name);
+
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            JSONArray jsonArray = jsonObject.getJSONArray("items");
+            if(jsonArray.length() != 0) {
+                try {
+                    jsonObject = jsonArray.getJSONObject(0);
+                    if (jsonObject.has("title")) {
+                        name = jsonObject.getString("title");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                Toast.makeText(mContext,"Could Not Find UPC In Database",Toast.LENGTH_LONG).show();
+            }
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
         //Setting text of fields go here
     }
 }
