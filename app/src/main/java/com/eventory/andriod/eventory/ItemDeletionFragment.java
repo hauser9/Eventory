@@ -81,7 +81,13 @@ public class ItemDeletionFragment extends Fragment {
                 {
                     quantity = "0";
                 }
-                quantityToRemove = Integer.parseInt(quantity);
+                try{
+                    quantityToRemove = Integer.parseInt(quantity);
+                }
+                catch (NumberFormatException e)
+                {
+                    Toast.makeText(getActivity(),"Only posistive integers are accepted in this field",Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -93,13 +99,12 @@ public class ItemDeletionFragment extends Fragment {
         mRemoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO need to add sql statements here to update deletion table
                 int currentQuantity = mItem.getQuantity();
                 if(quantityToRemove > currentQuantity){
-                    Toast.makeText(getActivity(),"Error quantity to remove is greater than inventory",Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(),"Error quantity to remove is greater than inventory",Toast.LENGTH_LONG).show();
                 }
-                else if (quantityToRemove <= 0){
-                    Toast.makeText(getActivity(),"Error please enter a number greater than 0 to remove",Toast.LENGTH_LONG);
-                }else if(quantityToRemove == currentQuantity)
+                else if(quantityToRemove == currentQuantity)
                 {
                     Inventory.get(getActivity()).deleteItem(mItem);
                 }

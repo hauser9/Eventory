@@ -27,7 +27,7 @@
         android:id="@+id/item_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"/>
+        android:inputType="number"/>
 
     <TextView
     style="?android:listSeparatorTextViewStyle"
@@ -39,7 +39,7 @@
         android:id="@+id/item_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"/>
+        android:inputType="numberDecimal"/>
 
     <Button
         android:id="@+id/item_date"
