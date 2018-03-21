@@ -23,8 +23,11 @@ public class ItemBaseHelper extends SQLiteOpenHelper{
         db.execSQL("create table "+ ItemTable.NAME + "(" +
             " _id integer primary key autoincrement," +
             ItemTable.Cols.UUID + "," +
-            ItemTable.Cols.NAME + "," +
-            ItemTable.Cols.QUANTITY+")");
+            ItemTable.Cols.ITEM_NAME + "," +
+            ItemTable.Cols.QUANTITY + "," +
+            ItemTable.Cols.DATE + "," +
+            ItemTable.Cols.PRICE + ")"
+        );
     }
 
     @Override

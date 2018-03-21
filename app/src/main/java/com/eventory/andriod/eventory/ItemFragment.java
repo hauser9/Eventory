@@ -1,7 +1,7 @@
 package com.eventory.andriod.eventory;
 
 import android.content.Intent;
-import android.os.Build;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.os.Bundle;
@@ -19,13 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.UUID;
 
 /**
@@ -44,6 +38,7 @@ public class ItemFragment extends Fragment {
     public static EditText mNameField;
     public static EditText mQuantityField;
     public static Button mDateButton;
+    public static EditText mPriceField;
 
     public static ItemFragment newInstance(UUID itemId){
         Bundle args = new Bundle();
@@ -71,6 +66,7 @@ public class ItemFragment extends Fragment {
         mQuantityField = (EditText) v.findViewById(R.id.item_quantity);
         mQuantityField.setText("" + mItem.getQuantity());
         mDateButton = (Button) v.findViewById(R.id.item_date);
+        mPriceField = (EditText) v.findViewById(R.id.item_price);
         updateDate();
 
         mNameField.addTextChangedListener(new TextWatcher() {
@@ -113,14 +109,32 @@ public class ItemFragment extends Fragment {
             }
         });
 
+        mPriceField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                double price = Double.parseDouble(s.toString());
+                mItem.setPrice(price);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         mDateButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 FragmentManager manager = getFragmentManager();
                 //TODO fix this when date is added to sql
-                //DatePickerFragment dialog = DatePickerFragment.newInstance(mItem.getDate());
-                //dialog.setTargetFragment(ItemFragment.this,REQUEST_DATE);
-                //dialog.show(manager,DIALOG_DATE);
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mItem.getDate());
+                dialog.setTargetFragment(ItemFragment.this,REQUEST_DATE);
+                dialog.show(manager,DIALOG_DATE);
 
             }
         });
@@ -130,31 +144,31 @@ public class ItemFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         if(requestCode == REQUEST_DATE){
-            Date date = (date)  intent.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Date date = (Date)  intent.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             //TODO uncomment when date is added to sql
-            //mItem.setDate(date);
+            mItem.setDate(date);
             updateDate();
         }
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
-        if(scanningResult != null)
-        {
-            String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            String upcHttp = URL_HEADER + scanContent;
-            FetchData process = new FetchData(upcHttp, getActivity());
-            process.execute();
+        else {
+            IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+            if (scanningResult != null) {
+                String scanContent = scanningResult.getContents();
+                String scanFormat = scanningResult.getFormatName();
+                String upcHttp = URL_HEADER + scanContent;
+                FetchData process = new FetchData(upcHttp, getActivity());
+                process.execute();
 
 
-        }
-        else{
-                Toast.makeText(getActivity(),R.string.no_scan_data,Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.no_scan_data, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     private void updateDate() {
 
         //TODO fix this when date is added to sql
-        // mDateButton.setText(mItem.getDate().toString());
+         mDateButton.setText(mItem.getDate().toString());
     }
 
     @Override
@@ -166,7 +180,12 @@ public class ItemFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.delete_item:
-                Inventory.get(getActivity()).deleteItem(mItem);
+               // Inventory.get(getActivity()).deleteItem(mItem);
+                //TODO add some logic that restricts deleteion when there is no quantity entered yet
+                UUID id = mItem.getId();
+                Item itemForDeletion = Inventory.get(getActivity()).getItem(id);
+                Intent intent = ItemDeletionActivity.newIntent(getActivity(),mItem.getId());
+                startActivity(intent);
                 getActivity().finish();
                 return true;
             case R.id.scan_barcode:

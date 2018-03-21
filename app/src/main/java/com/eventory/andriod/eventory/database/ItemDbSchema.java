@@ -7,12 +7,14 @@ package com.eventory.andriod.eventory.database;
 public class ItemDbSchema
 {
     public static final class ItemTable{
-        public static final String NAME = "items";
+        public static final String NAME = "item";
 
         public static final class Cols{
             public static final String UUID = "uuid";
-            public static final String NAME = "name";
+            public static final String ITEM_NAME = "name";
             public static final String QUANTITY = "quantity";
+            public static final String DATE = "date";
+            public static final String PRICE = "price";
         }
     }
 }

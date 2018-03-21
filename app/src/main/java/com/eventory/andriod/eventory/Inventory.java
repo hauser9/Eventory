@@ -2,13 +2,11 @@ package com.eventory.andriod.eventory;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.eventory.andriod.eventory.database.ItemBaseHelper;
 import com.eventory.andriod.eventory.database.ItemCursorWrapper;
-import com.eventory.andriod.eventory.database.ItemDbSchema;
 import com.eventory.andriod.eventory.database.ItemDbSchema.ItemTable;
 
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import java.util.UUID;
 
 public class Inventory {
     private static Inventory sInventory;
-    private List<Item> mItems;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -107,8 +104,10 @@ public class Inventory {
     private static ContentValues getContentValues(Item item){
         ContentValues values = new ContentValues();
         values.put(ItemTable.Cols.UUID,item.getId().toString());
-        values.put(ItemTable.Cols.NAME,item.getName());
+        values.put(ItemTable.Cols.ITEM_NAME,item.getName());
         values.put(ItemTable.Cols.QUANTITY,item.getQuantity());
+        values.put(ItemTable.Cols.DATE,item.getDate().getTime());
+        values.put(ItemTable.Cols.PRICE,item.getPrice());
 
         return values;
     }

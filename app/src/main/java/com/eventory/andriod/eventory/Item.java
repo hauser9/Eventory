@@ -1,5 +1,6 @@
 package com.eventory.andriod.eventory;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -10,6 +11,8 @@ public class Item {
     private UUID mId;
     private String mName;
     private int mQuantity;
+    private double mPrice;
+    private Date mDate;
 
     public Item(){
         this(UUID.randomUUID());
@@ -17,6 +20,7 @@ public class Item {
 
     public Item(UUID id){
         mId = id;
+        mDate = new Date();
     }
 
     public UUID getId()
@@ -39,4 +43,15 @@ public class Item {
     public void setQuantity(int quantity){
         mQuantity = quantity;
     }
+
+    public void setDate(Date date){ mDate = date;}
+
+    public Date getDate(){ return mDate;}
+
+    public void setPrice(double price){mPrice = price;}
+
+    public double getPrice(){ return mPrice;}
+
+
+
 }
