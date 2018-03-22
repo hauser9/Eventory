@@ -23,6 +23,7 @@ import java.util.UUID;
 public class ItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
+    private static final String STARTED_FROM_NEW = "NEW_POST";
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -76,6 +77,7 @@ public class ItemListFragment extends Fragment {
                 Item item = new Item();
                 Inventory.get(getActivity()).addItem(item);
                 Intent intent = ItemActivity.newIntent(getActivity(),item.getId());
+                intent.putExtra(STARTED_FROM_NEW,true);
                 startActivity(intent);
                 return true;
             default:
@@ -99,8 +101,21 @@ public class ItemListFragment extends Fragment {
 
         public void bind(Item item){
             mItem = item;
-            mNameTextView.setText(mItem.getName());
-            mQuantityTextView.setText("" + mItem.getQuantity());
+            String name,quantityString;
+            int quantity;
+
+            if(!mItem.getName().equals(""))
+            {
+                name = "Name: "+ mItem.getName();
+                quantityString = "Quantity: "+ mItem.getQuantity();
+            }else
+            {
+                name = mItem.getName();
+                quantity =  mItem.getQuantity();
+                quantityString = "" + quantity;
+            }
+            mNameTextView.setText(name);
+            mQuantityTextView.setText(""+quantityString);
         }
 
         @Override
@@ -108,6 +123,7 @@ public class ItemListFragment extends Fragment {
             UUID id = mItem.getId();
             Item item = Inventory.get(getActivity()).getItem(id);
             Intent intent = ItemActivity.newIntent(getActivity(),mItem.getId());
+            intent.putExtra(STARTED_FROM_NEW,false);
             startActivity(intent);
         }
     }

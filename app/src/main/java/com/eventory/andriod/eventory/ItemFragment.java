@@ -4,6 +4,8 @@ import android.content.Intent;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,13 +34,17 @@ public class ItemFragment extends Fragment {
     private static final String URL_HEADER = "https://api.upcitemdb.com/prod/trial/lookup?upc=";
     private static final String ARG_ITEM_ID = "item_id";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String STARTED_FROM_NEW = "NEW_POST";
     private static final int REQUEST_DATE = 0;
 
     private Item mItem;
+    private boolean mNewItem;
     public static EditText mNameField;
     public static EditText mQuantityField;
     public static Button mDateButton;
     public static EditText mPriceField;
+    public static Button mCancelButton;
+    public static Button mConfirmButton;
 
     public static ItemFragment newInstance(UUID itemId){
         Bundle args = new Bundle();
@@ -55,6 +61,7 @@ public class ItemFragment extends Fragment {
         setHasOptionsMenu(true);
         UUID itemId = (UUID) getArguments().getSerializable(ARG_ITEM_ID);
         mItem = Inventory.get(getActivity()).getItem(itemId);
+        mNewItem = getActivity().getIntent().getBooleanExtra(STARTED_FROM_NEW,false);
     }
 
     @Override
@@ -67,6 +74,16 @@ public class ItemFragment extends Fragment {
         mQuantityField.setText("" + mItem.getQuantity());
         mDateButton = (Button) v.findViewById(R.id.item_date);
         mPriceField = (EditText) v.findViewById(R.id.item_price);
+        mPriceField.setText(""+mItem.getPrice());
+        mCancelButton = (Button) v.findViewById(R.id.cancel_button);
+        mConfirmButton = (Button) v.findViewById(R.id.confirm_button);
+        mCancelButton.setBackgroundColor(Color.RED);
+        mConfirmButton.setBackgroundColor(Color.GREEN);
+
+        if(!mNewItem){
+            mCancelButton.setVisibility(View.INVISIBLE);
+        }
+
         updateDate();
 
         mNameField.addTextChangedListener(new TextWatcher() {
@@ -117,8 +134,10 @@ public class ItemFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                double price = Double.parseDouble(s.toString());
-                mItem.setPrice(price);
+                if(!s.toString().equals("")) {
+                    double price = Double.parseDouble(s.toString());
+                    mItem.setPrice(price);
+                }
             }
 
             @Override
@@ -135,6 +154,36 @@ public class ItemFragment extends Fragment {
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mItem.getDate());
                 dialog.setTargetFragment(ItemFragment.this,REQUEST_DATE);
                 dialog.show(manager,DIALOG_DATE);
+
+            }
+        });
+
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Inventory.get(getActivity()).deleteItem(mItem);
+                getActivity().finish();
+            }
+        });
+
+        mConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(mItem.getName() == null){
+                    Toast.makeText(getActivity(),"Must Enter a Name",Toast.LENGTH_LONG).show();
+                }
+                else if(mItem.getQuantity() == 0)
+                {
+                    Toast.makeText(getActivity(),"Must Enter a Positive Quantity",Toast.LENGTH_LONG).show();
+                }else if(mItem.getPrice() <= 0){
+                    Toast.makeText(getActivity(),"Must Enter a Positive Price",Toast.LENGTH_LONG).show();
+                }else
+                {
+                    getActivity().finish();
+                    Inventory.get(getActivity()).updateItem(mItem);
+                }
+
 
             }
         });
@@ -175,6 +224,10 @@ public class ItemFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu,inflater);
         inflater.inflate(R.menu.fragment_item,menu);
+        MenuItem deleteMenu = menu.findItem(R.id.delete_item);
+        if(mNewItem){
+            deleteMenu.setVisible(false);
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -194,13 +247,6 @@ public class ItemFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        Inventory.get(getActivity()).updateItem(mItem);
     }
 
 }

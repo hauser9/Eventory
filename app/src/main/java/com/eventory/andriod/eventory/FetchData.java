@@ -2,6 +2,7 @@ package com.eventory.andriod.eventory;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -70,6 +71,7 @@ public class FetchData extends AsyncTask<Void,Void,Void> {
                     jsonObject = jsonArray.getJSONObject(0);
                     if (jsonObject.has("title")) {
                         name = jsonObject.getString("title");
+                        ItemFragment.mNameField.setText(name, TextView.BufferType.EDITABLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
