@@ -20,10 +20,11 @@ import java.util.UUID;
  * Created by Michael on 2/19/2018.
  */
 
-public class ItemListFragment extends Fragment {
+public class RemovedItemListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
     private static final String STARTED_FROM_NEW = "NEW_POST";
+    private static final String STARTED_FROM_NEW2 = "STATISTICS";
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -33,7 +34,7 @@ public class ItemListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_item_list,container,false);
+        View view = inflater.inflate(R.layout.fragment_removed_item_list,container,false);
         mItemRecyclerView = (RecyclerView)view.findViewById(R.id.item_recycler_view);
         mItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -43,8 +44,8 @@ public class ItemListFragment extends Fragment {
     }
 
     private void updateUI(){
-        Inventory inventory = Inventory.get(getActivity());
-        List<Item> items = inventory.getItems();
+        RemovedInventory removedInventory = RemovedInventory.get(getActivity());
+        List<RemovedItem> items = removedInventory.getRemovedItems();
 
         if(mAdapter == null) {
             mAdapter = new ItemAdapter(items);
@@ -80,9 +81,6 @@ public class ItemListFragment extends Fragment {
                 intent.putExtra(STARTED_FROM_NEW,true);
                 startActivity(intent);
                 return true;
-            case R.id.mStats:
-                Intent removedIntent = new Intent(getActivity(), RemovedItemListActivity.class);
-                startActivity(removedIntent);
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
@@ -92,7 +90,7 @@ public class ItemListFragment extends Fragment {
 
         private TextView mNameTextView;
         private TextView mQuantityTextView;
-        private Item mItem;
+        private RemovedItem mItem;
 
         public ItemHolder(LayoutInflater inflater, ViewGroup parent){
             super(inflater.inflate(R.layout.list_item,parent,false));
@@ -102,7 +100,7 @@ public class ItemListFragment extends Fragment {
             mQuantityTextView = (TextView) itemView.findViewById(R.id.item_quantity);
         }
 
-        public void bind(Item item){
+        public void bind(RemovedItem item){
             mItem = item;
             String name,quantityString;
             int quantity;
@@ -124,7 +122,7 @@ public class ItemListFragment extends Fragment {
         @Override
         public void onClick(View view){
             UUID id = mItem.getId();
-            Item item = Inventory.get(getActivity()).getItem(id);
+            RemovedItem item = RemovedInventory.get(getActivity()).getRemovedItem(id);
             Intent intent = ItemActivity.newIntent(getActivity(),mItem.getId());
             intent.putExtra(STARTED_FROM_NEW,false);
             startActivity(intent);
@@ -133,9 +131,9 @@ public class ItemListFragment extends Fragment {
 
     public class ItemAdapter extends RecyclerView.Adapter<ItemHolder>{
 
-        private List<Item> mItems;
+        private List<RemovedItem> mItems;
 
-        public ItemAdapter(List<Item> items){
+        public ItemAdapter(List<RemovedItem> items){
             mItems = items;
         }
 
@@ -148,7 +146,7 @@ public class ItemListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ItemHolder holder, int position){
-            Item item = mItems.get(position);
+            RemovedItem item = mItems.get(position);
             holder.bind(item);
         }
 
@@ -157,7 +155,7 @@ public class ItemListFragment extends Fragment {
             return mItems.size();
         }
 
-        public void setItems(List<Item> items){
+        public void setItems(List<RemovedItem> items){
             mItems = items;
         }
     }
