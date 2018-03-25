@@ -116,6 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                 newUser.setEmail(mEmail);
                 newUser.setName(mName);
                 userBase.addUser(newUser);
+                UserBase.setCurrentUser(newUser);
 
                 Intent registerIntent = new Intent(RegisterActivity.this, ItemListActivity.class);
                 RegisterActivity.this.startActivity(registerIntent);
