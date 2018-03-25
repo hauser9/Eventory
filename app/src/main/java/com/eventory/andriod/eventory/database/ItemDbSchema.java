@@ -15,6 +15,7 @@ public class ItemDbSchema
             public static final String QUANTITY = "quantity";
             public static final String DATE = "date";
             public static final String PRICE = "price";
+            public static final String USERNAME = "username";
         }
     }
 }

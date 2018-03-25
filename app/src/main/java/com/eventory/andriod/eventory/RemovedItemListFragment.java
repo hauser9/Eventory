@@ -134,11 +134,6 @@ public class RemovedItemListFragment extends Fragment {
 
         @Override
         public void onClick(View view){
-            UUID id = mItem.getId();
-            RemovedItem item = RemovedInventory.get(getActivity()).getRemovedItem(id);
-            Intent intent = ItemActivity.newIntent(getActivity(),mItem.getId());
-            intent.putExtra(STARTED_FROM_NEW,false);
-            startActivity(intent);
         }
     }
 
