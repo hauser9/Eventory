@@ -15,11 +15,14 @@
             android:name=".ItemActivity"
             android:parentActivityName=".ItemListActivity" />
         <activity android:name=".ItemListActivity">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".ItemDeletionActivity"
@@ -31,7 +34,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RemovedItemListActivity"></activity>
     </application>
 
 </manifest>

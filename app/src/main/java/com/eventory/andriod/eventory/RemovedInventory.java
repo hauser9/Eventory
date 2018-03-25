@@ -13,6 +13,7 @@ import com.eventory.andriod.eventory.database.RemovedItemDbSchema.RemovedItemTab
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Michael on 3/22/2018.
@@ -31,6 +32,24 @@ public class RemovedInventory {
             sRemovedInventory = new RemovedInventory(context);
         }
         return sRemovedInventory;
+    }
+
+    public RemovedItem getRemovedItem(UUID id){
+        RemovedItemCursorWrapper cursor = queryRemovedItems(
+                RemovedItemTable.Cols.UUID + " = ?",
+                new String[]{id.toString()}
+        );
+
+        try{
+            if(cursor.getCount() == 0){
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getRemovedItem();
+        }finally {
+            cursor.close();
+        }
     }
 
     public void addRemovedItem(RemovedItem removedItem){
@@ -56,6 +75,19 @@ public class RemovedInventory {
 
         return new RemovedItemCursorWrapper(cursor);
     }
+
+    public void updateRemovedItem (RemovedItem item){
+        String uuidString = item.getId().toString();
+        ContentValues values = getContentValues(item);
+        mDatabase.update(RemovedItemTable.NAME,values,
+                RemovedItemTable.Cols.UUID + "= ?",
+                new String[]{uuidString});
+    }
+
+    public void deleteRemovedItem(RemovedItem item){
+        mDatabase.delete(RemovedItemTable.NAME,RemovedItemTable.Cols.UUID + "= ?",new String[]{item.getId().toString()});
+    }
+
 
     public List<RemovedItem> getRemovedItems(){
         List<RemovedItem> removedItems = new ArrayList<>();
