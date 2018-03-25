@@ -21,7 +21,7 @@ import java.util.UUID;
  * Created by Michael on 2/19/2018.
  */
 
-public class RemovedItemListFragment extends Fragment {
+public class WastedItemsListFragment extends Fragment {
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
     private static final String STARTED_FROM_NEW = "NEW_POST";
@@ -46,7 +46,7 @@ public class RemovedItemListFragment extends Fragment {
 
     private void updateUI(){
         RemovedInventory removedInventory = RemovedInventory.get(getActivity());
-        List<RemovedItem> items = removedInventory.getRemovedItems();
+        List<RemovedItem> items = removedInventory.getRemovedWastedItems();
 
         if(mAdapter == null) {
             mAdapter = new ItemAdapter(items);

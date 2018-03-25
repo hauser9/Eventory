@@ -83,6 +83,7 @@ public class ItemListFragment extends Fragment {
             case R.id.mStats:
                 Intent removedIntent = new Intent(getActivity(), RemovedItemListActivity.class);
                 startActivity(removedIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
