@@ -38,6 +38,10 @@ public class ItemFragment extends Fragment {
     private static final int REQUEST_DATE = 0;
 
     private Item mItem;
+    private String mName;
+    private Date mDate;
+    private int mQuantity;
+    private double mPrice;
     private boolean mNewItem;
     public static EditText mNameField;
     public static EditText mQuantityField;
@@ -94,7 +98,7 @@ public class ItemFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mItem.setName(s.toString());
+                mName = s.toString();
             }
 
             @Override
@@ -116,8 +120,7 @@ public class ItemFragment extends Fragment {
                 {
                     quantity = "0";
                 }
-                int number = Integer.parseInt(quantity);
-                mItem.setQuantity(number);
+                mQuantity = Integer.parseInt(quantity);
             }
 
             @Override
@@ -135,8 +138,7 @@ public class ItemFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(!s.toString().equals("")) {
-                    double price = Double.parseDouble(s.toString());
-                    mItem.setPrice(price);
+                    mPrice = Double.parseDouble(s.toString());
                 }
             }
 
@@ -180,6 +182,10 @@ public class ItemFragment extends Fragment {
                     Toast.makeText(getActivity(),"Must Enter a Positive Price",Toast.LENGTH_LONG).show();
                 }else
                 {
+                    mItem.setName(mName);
+                    mItem.setQuantity(mQuantity);
+                    mItem.setPrice(mPrice);
+                    mItem.setDate(mDate);
                     getActivity().finish();
                     Inventory.get(getActivity()).updateItem(mItem);
                 }
@@ -193,9 +199,8 @@ public class ItemFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         if(requestCode == REQUEST_DATE){
-            Date date = (Date)  intent.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+             mDate = (Date)  intent.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             //TODO uncomment when date is added to sql
-            mItem.setDate(date);
             updateDate();
         }
         else {

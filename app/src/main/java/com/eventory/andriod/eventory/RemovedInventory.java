@@ -97,6 +97,7 @@ public class RemovedInventory {
         try{
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
+
                 removedItems.add(cursor.getRemovedItem());
                 cursor.moveToNext();
             }
@@ -106,6 +107,28 @@ public class RemovedInventory {
             }
 
             return removedItems;
+    }
+
+    public List<RemovedItem> getRemovedWastedItems(){
+        List<RemovedItem> wastedItems = new ArrayList<>();
+
+        RemovedItemCursorWrapper cursor = queryRemovedItems(null,null);
+
+        try{
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+
+                if (cursor.getRemovedItem().getWaste()) {
+                    wastedItems.add(cursor.getRemovedItem());
+                }
+                cursor.moveToNext();
+            }
+        }
+        finally{
+            cursor.close();
+        }
+
+        return wastedItems;
     }
 
     public static ContentValues getContentValues(RemovedItem removedItem){
