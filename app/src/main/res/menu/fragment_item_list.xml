@@ -6,10 +6,14 @@
         android:id="@+id/mStats"
         android:title="Statistics"
         app:showAsAction="always" />
+
+    <item android:id="@+id/mLogout"
+        android:title="Logout"
+        app:showAsAction="always" />
     <item
         android:id="@+id/new_item"
         android:icon="@drawable/ic_menu_add"
         android:title="@string/new_item"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="always"/>
 
 </menu>

@@ -83,6 +83,9 @@ public class ItemListFragment extends Fragment {
             case R.id.mStats:
                 Intent removedIntent = new Intent(getActivity(), RemovedItemListActivity.class);
                 startActivity(removedIntent);
+            case R.id.mLogout:
+                Intent logoutIntent = new Intent(getActivity(),LoginActivity.class);
+                startActivity(logoutIntent);
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
@@ -107,7 +110,7 @@ public class ItemListFragment extends Fragment {
             String name,quantityString;
             int quantity;
 
-            if(!mItem.getName().equals(""))
+            if(mItem.getName()!= null && !mItem.getName().equals(""))
             {
                 name = "Name: "+ mItem.getName();
                 quantityString = "Quantity: "+ mItem.getQuantity();

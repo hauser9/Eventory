@@ -13,10 +13,10 @@ public class User {
     private String mName;
     private String mEmail;
 
-    public User(String Username)
+    public User(String username)
     {
         //get list of usernames and check if it is unique
-        mUsername = mUsername;
+        mUsername = username;
     }
 
     public void setPassword(String password){

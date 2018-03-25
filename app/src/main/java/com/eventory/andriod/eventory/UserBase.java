@@ -20,6 +20,7 @@ import java.util.List;
 public class UserBase {
 
     private static UserBase sUserBase;
+    private static User sCurrentUser;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -81,6 +82,14 @@ public class UserBase {
         }finally{
             cursor.close();
         }
+    }
+
+    public static void setCurrentUser(User user){
+        sCurrentUser = user;
+    }
+
+    public static User getCurrentUser(){
+        return sCurrentUser;
     }
 
     private static ContentValues getContentValues(User user){

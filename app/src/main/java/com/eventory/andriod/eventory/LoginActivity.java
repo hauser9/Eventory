@@ -74,20 +74,33 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                List<User> users = UserBase.get(LoginActivity.this).getUsers();
+                User user;
+                UserBase userBase = UserBase.get(LoginActivity.this);
+                List<User> users = userBase.getUsers();
                 boolean usernameTrue = false;
-                for(int counter = 0; counter < users.size(); counter++){
-                    User user = users.get(counter);
-                    if(user.getUsername().equals(mUsername))
+                if (users.size() == 0){
+                    Toast.makeText(LoginActivity.this,"Please create an account",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    for (int counter = 0; counter < users.size(); counter++) {
+                        user = users.get(counter);
+                        if (user.getUsername().equals(mUsername)) {
+                            usernameTrue = true;
+                        }
+                    }
+                    if (!usernameTrue) {
+                        Toast.makeText(LoginActivity.this, "Error this username is not used", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (!userBase.getUser(mUsername).getPassword().equals(mPassword))
                     {
-                        usernameTrue = true;
+                        Toast.makeText(LoginActivity.this,"Error password does not match username",Toast.LENGTH_SHORT).show();
+                    }
+                    else if(userBase.getUser(mUsername) != null) {
+                        UserBase.setCurrentUser(userBase.getUser(mUsername));
+                        Intent registerIntent = new Intent(LoginActivity.this, ItemListActivity.class);
+                        LoginActivity.this.startActivity(registerIntent);
                     }
                 }
-                if(!usernameTrue){
-                    Toast.makeText(LoginActivity.this,"Error this username is not used",Toast.LENGTH_SHORT);
-                }
-                Intent registerIntent = new Intent(LoginActivity.this, ItemListActivity.class);
-                LoginActivity.this.startActivity(registerIntent);
             }
         });
     }
