@@ -83,9 +83,13 @@ public class ItemListFragment extends Fragment {
             case R.id.mStats:
                 Intent removedIntent = new Intent(getActivity(), RemovedItemListActivity.class);
                 startActivity(removedIntent);
+<<<<<<< HEAD
+                return true;
+=======
             case R.id.mLogout:
                 Intent logoutIntent = new Intent(getActivity(),LoginActivity.class);
                 startActivity(logoutIntent);
+>>>>>>> 7076f4d4667bf54cc7737407369fb6a2e22b6f89
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
