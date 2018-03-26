@@ -1,10 +1,8 @@
 package com.eventory.andriod.eventory;
 
 import android.content.Intent;
-
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -86,6 +84,9 @@ public class ItemFragment extends Fragment {
 
         if(!mNewItem){
             mCancelButton.setVisibility(View.INVISIBLE);
+            mName = mItem.getName();
+            mPrice = mItem.getPrice();
+            mQuantity = mItem.getQuantity();
         }
 
         updateDate();
@@ -172,25 +173,29 @@ public class ItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(mName == null){
-                    Toast.makeText(getActivity(),"Must Enter a Name",Toast.LENGTH_LONG).show();
-                }
-                else if(mQuantity == 0)
-                {
-                    Toast.makeText(getActivity(),"Must Enter a Positive Quantity",Toast.LENGTH_LONG).show();
-                }else if(mPrice <= 0){
-                    Toast.makeText(getActivity(),"Must Enter a Positive Price",Toast.LENGTH_LONG).show();
-                }else
-                {
-                    mItem.setName(mName);
-                    mItem.setQuantity(mQuantity);
-                    mItem.setPrice(mPrice);
-                    mItem.setUsername(UserBase.getCurrentUser().getUsername());
-                    Inventory.get(getActivity()).updateItem(mItem);
-                    getActivity().finish();
+                if(mNewItem) {
+                    if (mName == null) {
+                        Toast.makeText(getActivity(), "Must Enter a Name", Toast.LENGTH_LONG).show();
+                    } else if (mQuantity == 0) {
+                        Toast.makeText(getActivity(), "Must Enter a Positive Quantity", Toast.LENGTH_LONG).show();
+                    } else if (mPrice <= 0) {
+                        Toast.makeText(getActivity(), "Must Enter a Positive Price", Toast.LENGTH_LONG).show();
+                    } else {
+                        mItem.setName(mName);
+                        mItem.setQuantity(mQuantity);
+                        mItem.setPrice(mPrice);
+                        mItem.setUsername(UserBase.getCurrentUser().getUsername());
+                        Inventory.get(getActivity()).updateItem(mItem);
+                        getActivity().finish();
 
+                    }
                 }
-
+                else
+                {
+                    if(mQuantity < mItem.getQuantity()){
+                        Toast.makeText(getActivity(), "Please click the remove report icon to remove items from inventory",Toast.LENGTH_SHORT).show();
+                    }
+                }
 
             }
         });
@@ -213,8 +218,6 @@ public class ItemFragment extends Fragment {
                 String upcHttp = URL_HEADER + scanContent;
                 FetchData process = new FetchData(upcHttp, getActivity());
                 process.execute();
-
-
             } else {
                 Toast.makeText(getActivity(), R.string.no_scan_data, Toast.LENGTH_SHORT).show();
             }
@@ -222,7 +225,6 @@ public class ItemFragment extends Fragment {
     }
 
     private void updateDate() {
-
         //TODO fix this when date is added to sql
          mDateButton.setText(mItem.getDate().toString());
     }
@@ -255,5 +257,4 @@ public class ItemFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

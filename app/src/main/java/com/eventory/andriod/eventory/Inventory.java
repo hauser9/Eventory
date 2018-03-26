@@ -58,12 +58,15 @@ public class Inventory {
         User currentUser = UserBase.getCurrentUser();
         String username = currentUser.getUsername();
 
-        for(int counter = 0; counter < allItems.size(); counter++){
-            Item tempItem = allItems.get(counter);
-            if(tempItem.getUsername().equals(username)){
-                userItems.add(tempItem);
-            }
+        if(username != null) {
+            for (int counter = 0; counter < allItems.size(); counter++) {
+                Item tempItem = allItems.get(counter);
+                String itemUsername = tempItem.getUsername();
+                if (itemUsername != null && itemUsername.equals(username)) {
+                    userItems.add(tempItem);
+                }
 
+            }
         }
 
         return userItems;
