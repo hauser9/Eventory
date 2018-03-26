@@ -172,22 +172,23 @@ public class ItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(mItem.getName() == null){
+                if(mName == null){
                     Toast.makeText(getActivity(),"Must Enter a Name",Toast.LENGTH_LONG).show();
                 }
-                else if(mItem.getQuantity() == 0)
+                else if(mQuantity == 0)
                 {
                     Toast.makeText(getActivity(),"Must Enter a Positive Quantity",Toast.LENGTH_LONG).show();
-                }else if(mItem.getPrice() <= 0){
+                }else if(mPrice <= 0){
                     Toast.makeText(getActivity(),"Must Enter a Positive Price",Toast.LENGTH_LONG).show();
                 }else
                 {
                     mItem.setName(mName);
                     mItem.setQuantity(mQuantity);
                     mItem.setPrice(mPrice);
-                    mItem.setDate(mDate);
-                    getActivity().finish();
+                    mItem.setUsername(UserBase.getCurrentUser().getUsername());
                     Inventory.get(getActivity()).updateItem(mItem);
+                    getActivity().finish();
+
                 }
 
 
@@ -201,6 +202,7 @@ public class ItemFragment extends Fragment {
         if(requestCode == REQUEST_DATE){
              mDate = (Date)  intent.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             //TODO uncomment when date is added to sql
+            mItem.setDate(mDate);
             updateDate();
         }
         else {

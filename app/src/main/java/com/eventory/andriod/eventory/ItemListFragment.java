@@ -44,7 +44,7 @@ public class ItemListFragment extends Fragment {
 
     private void updateUI(){
         Inventory inventory = Inventory.get(getActivity());
-        List<Item> items = inventory.getItems();
+        List<Item> items = inventory.getCurrentUserItems();
 
         if(mAdapter == null) {
             mAdapter = new ItemAdapter(items);

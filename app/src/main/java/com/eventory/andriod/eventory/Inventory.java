@@ -52,6 +52,23 @@ public class Inventory {
         return items;
     }
 
+    public List<Item> getCurrentUserItems(){
+        List<Item> allItems = getItems();
+        List<Item> userItems = new ArrayList<>();
+        User currentUser = UserBase.getCurrentUser();
+        String username = currentUser.getUsername();
+
+        for(int counter = 0; counter < allItems.size(); counter++){
+            Item tempItem = allItems.get(counter);
+            if(tempItem.getUsername().equals(username)){
+                userItems.add(tempItem);
+            }
+
+        }
+
+        return userItems;
+    }
+
     public Item getItem(UUID id){
         ItemCursorWrapper cursor = queryItems(
                 ItemTable.Cols.UUID + " = ?",
@@ -108,6 +125,7 @@ public class Inventory {
         values.put(ItemTable.Cols.QUANTITY,item.getQuantity());
         values.put(ItemTable.Cols.DATE,item.getDate().getTime());
         values.put(ItemTable.Cols.PRICE,item.getPrice());
+        values.put(ItemTable.Cols.USERNAME,item.getUsername());
 
         return values;
     }

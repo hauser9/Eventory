@@ -26,7 +26,8 @@ public class ItemBaseHelper extends SQLiteOpenHelper{
             ItemTable.Cols.ITEM_NAME + "," +
             ItemTable.Cols.QUANTITY + "," +
             ItemTable.Cols.DATE + "," +
-            ItemTable.Cols.PRICE + ")"
+            ItemTable.Cols.PRICE + ","+
+            ItemTable.Cols.USERNAME + ")"
         );
     }
 

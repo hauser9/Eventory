@@ -13,6 +13,7 @@ public class Item {
     private int mQuantity;
     private double mPrice;
     private Date mDate;
+    private String mUsername;
 
     public Item(){
         this(UUID.randomUUID());
@@ -51,6 +52,14 @@ public class Item {
     public void setPrice(double price){mPrice = price;}
 
     public double getPrice(){ return mPrice;}
+
+    public String getUsername(){
+        return mUsername;
+    }
+
+    public void setUsername(String username){
+        mUsername = username;
+    }
 
 
 
