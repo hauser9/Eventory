@@ -14,6 +14,7 @@ public class RemovedItem {
     private double mTotalPrice;
     private Date mDate;
     private boolean mWaste;
+    private String mUsername;
 
     public RemovedItem(){
         this(UUID.randomUUID());
@@ -60,6 +61,15 @@ public class RemovedItem {
     public boolean getWaste(){
         return mWaste;
     }
+
+    public String getUsername(){
+        return mUsername;
+    }
+
+    public void setUsername( String username){
+        mUsername = username;
+    }
+
 
 }
 

@@ -26,6 +26,7 @@ public class RemovedItemCursorWrapper extends CursorWrapper {
         double totalPrice = getDouble(getColumnIndex(RemovedItemTable.Cols.TOTAL_PRICE));
         long date = getLong(getColumnIndex(RemovedItemTable.Cols.DATE));
         int waste = getInt(getColumnIndex(RemovedItemTable.Cols.WASTE));
+        String username = getString(getColumnIndex(RemovedItemTable.Cols.USERNAME));
 
         RemovedItem removedItem = new RemovedItem(UUID.fromString(uuidString));
         removedItem.setName(name);
@@ -33,6 +34,7 @@ public class RemovedItemCursorWrapper extends CursorWrapper {
         removedItem.setPrice(totalPrice);
         removedItem.setDate(new Date(date));
         removedItem.setWaste(waste != 0);
+        removedItem.setUsername(username);
 
         return removedItem;
 

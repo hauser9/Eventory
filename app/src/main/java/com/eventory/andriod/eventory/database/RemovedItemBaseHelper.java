@@ -28,7 +28,8 @@ public class RemovedItemBaseHelper extends SQLiteOpenHelper {
         RemovedItemTable.Cols.QUANTITY + "," +
         RemovedItemTable.Cols.TOTAL_PRICE + "," +
         RemovedItemTable.Cols.DATE + "," +
-        RemovedItemTable.Cols.WASTE + ")"
+        RemovedItemTable.Cols.WASTE + "," +
+        RemovedItemTable.Cols.USERNAME + ")"
         );
     }
 

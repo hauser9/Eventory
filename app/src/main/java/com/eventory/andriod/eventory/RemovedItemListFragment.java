@@ -46,7 +46,7 @@ public class RemovedItemListFragment extends Fragment {
 
     private void updateUI(){
         RemovedInventory removedInventory = RemovedInventory.get(getActivity());
-        List<RemovedItem> items = removedInventory.getRemovedItems();
+        List<RemovedItem> items = removedInventory.getCurrentUserRemovedItems();
 
         if(mAdapter == null) {
             mAdapter = new ItemAdapter(items);
