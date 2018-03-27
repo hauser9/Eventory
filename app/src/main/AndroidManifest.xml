@@ -11,10 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ItemActivity"/>
-        <activity android:name=".ItemListActivity">
-        </activity>
+        <activity android:name=".ItemActivity" />
+        <activity android:name=".ItemListActivity"></activity>
         <activity
             android:name=".ItemDeletionActivity"
             android:parentActivityName=".ItemActivity" />
@@ -26,8 +24,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".RemovedItemListActivity"
-            android:parentActivityName=".ItemListActivity"></activity>
+        <activity
+            android:name=".RemovedItemListActivity"
+            android:parentActivityName=".ItemListActivity" />
+        <activity android:name=".WastedItemsListActivity"></activity>
     </application>
 
 </manifest>
