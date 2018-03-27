@@ -16,6 +16,7 @@ public class RemovedItemDbSchema {
             public static final String TOTAL_PRICE = "total_price";
             public static final String DATE = "date";
             public static final String WASTE = "waste";
+            public static final String USERNAME = "username";
         }
     }
 }

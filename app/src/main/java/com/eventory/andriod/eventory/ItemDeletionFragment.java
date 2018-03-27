@@ -164,6 +164,7 @@ public class ItemDeletionFragment extends Fragment {
                     mRemovedItem.setQuantity(quantityToRemove);
                     mRemovedItem.setPrice(mItem.getPrice() * quantityToRemove);
                     mRemovedItem.setDate(new Date());
+                    mRemovedItem.setUsername(UserBase.getCurrentUser().getUsername());
                     int newQuantity = currentQuantity - quantityToRemove;
                     mItem.setQuantity(newQuantity);
                     RemovedInventory.get(getActivity()).addRemovedItem(mRemovedItem);

@@ -88,6 +88,27 @@ public class RemovedInventory {
         mDatabase.delete(RemovedItemTable.NAME,RemovedItemTable.Cols.UUID + "= ?",new String[]{item.getId().toString()});
     }
 
+    public List<RemovedItem> getCurrentUserRemovedItems(){
+        List<RemovedItem> allItems = getRemovedItems();
+        List<RemovedItem> userRemovedItems = new ArrayList<>();
+
+        User currentUser = UserBase.getCurrentUser();
+        String username = currentUser.getUsername();
+
+        if(username != null){
+            for(int counter = 0; counter< allItems.size(); counter++){
+                RemovedItem tempRemovedItem = allItems.get(counter);
+                String itemUsername = tempRemovedItem.getUsername();
+                if(itemUsername != null && itemUsername.equals(username))
+                {
+                    userRemovedItems.add(tempRemovedItem);
+                }
+            }
+        }
+
+        return userRemovedItems;
+    }
+
 
     public List<RemovedItem> getRemovedItems(){
         List<RemovedItem> removedItems = new ArrayList<>();
@@ -118,7 +139,7 @@ public class RemovedInventory {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
 
-                if (cursor.getRemovedItem().getWaste()) {
+                if (cursor.getRemovedItem().getUsername() != null && cursor.getRemovedItem().getUsername() == UserBase.getCurrentUser().getUsername() &&cursor.getRemovedItem().getWaste()) {
                     wastedItems.add(cursor.getRemovedItem());
                 }
                 cursor.moveToNext();
@@ -139,6 +160,7 @@ public class RemovedInventory {
         values.put(RemovedItemTable.Cols.TOTAL_PRICE,removedItem.getPrice());
         values.put(RemovedItemTable.Cols.DATE,removedItem.getDate().getTime());
         values.put(RemovedItemTable.Cols.WASTE,removedItem.getWaste()? 1 : 0);
+        values.put(RemovedItemTable.Cols.USERNAME,removedItem.getUsername());
 
         return values;
     }

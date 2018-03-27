@@ -103,23 +103,27 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 UserBase userBase = UserBase.get(RegisterActivity.this);
                 List<User> users = userBase.getUsers();
+                boolean validLogin = true;
 
                 for(int counter = 0; counter < users.size(); counter++)
                 {
                     if(mUsername.equals(users.get(counter).getUsername()))
                     {
                         Toast.makeText(RegisterActivity.this,"Error this username is already in use try a different username",Toast.LENGTH_SHORT).show();
+                        validLogin = false;
                     }
                 }
-                User newUser = new User(mUsername);
-                newUser.setPassword(mPassword);
-                newUser.setEmail(mEmail);
-                newUser.setName(mName);
-                userBase.addUser(newUser);
-                UserBase.setCurrentUser(newUser);
+                if(validLogin) {
+                    User newUser = new User(mUsername);
+                    newUser.setPassword(mPassword);
+                    newUser.setEmail(mEmail);
+                    newUser.setName(mName);
+                    userBase.addUser(newUser);
+                    UserBase.setCurrentUser(newUser);
 
-                Intent registerIntent = new Intent(RegisterActivity.this, ItemListActivity.class);
-                RegisterActivity.this.startActivity(registerIntent);
+                    Intent registerIntent = new Intent(RegisterActivity.this, ItemListActivity.class);
+                    RegisterActivity.this.startActivity(registerIntent);
+                }
 
             }
         });

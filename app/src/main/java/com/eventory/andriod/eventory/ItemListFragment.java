@@ -44,7 +44,7 @@ public class ItemListFragment extends Fragment {
 
     private void updateUI(){
         Inventory inventory = Inventory.get(getActivity());
-        List<Item> items = inventory.getItems();
+        List<Item> items = inventory.getCurrentUserItems();
 
         if(mAdapter == null) {
             mAdapter = new ItemAdapter(items);
@@ -83,13 +83,11 @@ public class ItemListFragment extends Fragment {
             case R.id.mStats:
                 Intent removedIntent = new Intent(getActivity(), RemovedItemListActivity.class);
                 startActivity(removedIntent);
-<<<<<<< HEAD
                 return true;
-=======
             case R.id.mLogout:
                 Intent logoutIntent = new Intent(getActivity(),LoginActivity.class);
                 startActivity(logoutIntent);
->>>>>>> 7076f4d4667bf54cc7737407369fb6a2e22b6f89
+                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }

@@ -26,6 +26,7 @@ public class ItemCursorWrapper extends CursorWrapper {
         int quantity = getInt(getColumnIndex(ItemTable.Cols.QUANTITY));
         long date = getLong(getColumnIndex(ItemTable.Cols.DATE));
         double price = getDouble(getColumnIndex(ItemTable.Cols.PRICE));
+        String username = getString(getColumnIndex(ItemTable.Cols.USERNAME));
 
 
         Item item = new Item(UUID.fromString(uuidString));
@@ -33,6 +34,7 @@ public class ItemCursorWrapper extends CursorWrapper {
         item.setQuantity(quantity);
         item.setDate(new Date(date));
         item.setPrice(price);
+        item.setUsername(username);
 
         return item;
     }

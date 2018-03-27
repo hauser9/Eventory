@@ -46,7 +46,7 @@ public class RemovedItemListFragment extends Fragment {
 
     private void updateUI(){
         RemovedInventory removedInventory = RemovedInventory.get(getActivity());
-        List<RemovedItem> items = removedInventory.getRemovedItems();
+        List<RemovedItem> items = removedInventory.getCurrentUserRemovedItems();
 
         if(mAdapter == null) {
             mAdapter = new ItemAdapter(items);
@@ -83,17 +83,8 @@ public class RemovedItemListFragment extends Fragment {
                 Intent homeIntent = new Intent(getActivity(), ItemListActivity.class);
                 startActivity(homeIntent);
             case R.id.mWasted:
-                Fragment newFragment = new WastedItemsListFragment();
-                // consider using Java coding conventions (upper first char class names!!!)
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
-                transaction.replace(R.id.fragment_container, newFragment);
-                transaction.addToBackStack(null);
-
-                // Commit the transaction
-                transaction.commit();
+                Intent wastedIntent = new Intent(getActivity(), WastedItemsListActivity.class);
+                startActivity(wastedIntent);
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
