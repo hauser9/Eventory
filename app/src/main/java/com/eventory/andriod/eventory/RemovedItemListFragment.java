@@ -79,9 +79,6 @@ public class RemovedItemListFragment extends Fragment {
                 Intent removedIntent = new Intent(getActivity(), RemovedItemListActivity.class);
                 startActivity(removedIntent);
                 return true;
-            case R.id.mHome:
-                Intent homeIntent = new Intent(getActivity(), ItemListActivity.class);
-                startActivity(homeIntent);
             case R.id.mWasted:
                 Intent wastedIntent = new Intent(getActivity(), WastedItemsListActivity.class);
                 startActivity(wastedIntent);
