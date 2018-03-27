@@ -139,7 +139,7 @@ public class RemovedInventory {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
 
-                if (cursor.getRemovedItem().getUsername() != null && cursor.getRemovedItem().getUsername() == UserBase.getCurrentUser().getUsername() &&cursor.getRemovedItem().getWaste()) {
+                if (cursor.getRemovedItem().getUsername() != null && cursor.getRemovedItem().getUsername().equals(UserBase.getCurrentUser().getUsername()) &&cursor.getRemovedItem().getWaste()) {
                     wastedItems.add(cursor.getRemovedItem());
                 }
                 cursor.moveToNext();

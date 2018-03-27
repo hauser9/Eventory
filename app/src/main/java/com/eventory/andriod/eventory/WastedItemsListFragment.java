@@ -82,9 +82,11 @@ public class WastedItemsListFragment extends Fragment {
             case R.id.mHome:
                 Intent homeIntent = new Intent(getActivity(), ItemListActivity.class);
                 startActivity(homeIntent);
+                return true;
             case R.id.mWasted:
                 Intent wastedIntent = new Intent(getActivity(), WastedItemsListActivity.class);
                 startActivity(wastedIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
